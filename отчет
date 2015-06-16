@@ -1,0 +1,531 @@
+Нашим ментором была поставлена задачанаписать 2d игру, научив нас программировать необычные для нас ранее вещи. 
+Я программировала в Visual Studio и с нуля изучила принципы работы MFC.
+MFC - это инструмент для программирования сложных приложений, от которых требуется высокая эффективность и 
+надежность. MFC поощряет использование объектно-ориентированного программирования, что дает ощутимые преимущества при 
+решении сложных (не с точки зрения только интерфейса пользователя) задач, по сравнению с компонентно-ориентированным
+ подходом, применяемым в системах RAD (быстрой разработки приложений). 
+Я поставила себе цель воссоздать игру Тетрис, созданную Алексеем Пажитновым в 1984 году.
+
+Начинала я с написания поля, и создания фигурок, которых оказалось больше, чем задумывалось в начале.
+Почти под каждую фигуру был написан класс, в котором изменялись некоторые параметры, если фигурку нужно было перевернуь.
+У мея не получилось сделать так, чтобы фигурки были привязаны к полю и перемещались по нему, переворачиваяь по желанию игрока
+из-за нехватки времени. 
+проект//
+#include <afxwin.h>
+#include <string.h>
+#include <stdlib.h>
+#include <iostream>
+#include <stdio.h>
+
+using namespace std;
+
+// Класс основного окна приложения
+class CMainWin : public CFrameWnd {
+public:
+	CMainWin();
+	afx_msg void OnPaint();
+	// Декларирование карты сообщений
+	DECLARE_MESSAGE_MAP()
+};
+
+// Класс приложения. Должен существовать только
+// один экземпляр этого класса.
+
+// Член-функция InitInstance() вызывается при запуске
+// приложения.
+
+class CApp : public CWinApp {
+public:
+	BOOL InitInstance();
+};
+
+// Создание одного и только одного экземпляра
+// приложения
+
+// Реализация карты сообщений главного окна
+BEGIN_MESSAGE_MAP(CMainWin /* класс */,
+	CFrameWnd /* базовый класс */)
+	ON_WM_PAINT()
+END_MESSAGE_MAP()
+// Реализация функций отклика на сообщения
+
+CApp App;
+
+// Реализация
+
+BOOL CApp::InitInstance()
+{
+
+	// Создание главного окна приложения и его
+	// отображение.
+
+	// Член CApp::m_pMainWnd - это указатель на объект
+	// главного окна.
+
+	m_pMainWnd = new CMainWin;
+	m_pMainWnd->ShowWindow(SW_RESTORE);
+	m_pMainWnd->UpdateWindow();
+
+	// Сигнализируем MFC об успешной инициализации
+	// приложения. 
+
+	return TRUE;
+}
+
+CMainWin::CMainWin()
+{
+	// Создание окна с заголовком. Используется
+	// встроенный в MFC
+
+	// класс окна, поэтому первый параметр 0.
+	this->Create(0, TEXT("Простейшее приложение на MFC"));
+}
+
+
+/*class Stick2 {
+	public:
+		int u, s;
+		Stick2(int u1, int s1) :u(u1), s(s1) {}
+		void Print(int x1, int y1, int t, CPaintDC &dc)
+		{
+			if (u > 0) {
+				dc.MoveTo(CPoint(x1 - 2, y1 - 2));
+				dc.LineTo(CPoint(x1 - 1 + s*t, y1 - 2));
+				dc.MoveTo(CPoint(x1 - 2, y1 - 3 + t));
+				dc.LineTo(CPoint(x1 - 1 + s*t, y1 - 3 + t));
+
+				for (int i = 0; i < l + 1; i++)
+				{
+					dc.MoveTo(CPoint(x1 - 2 + i*t, y1 - 1));
+					dc.LineTo(CPoint(x1 - 2 + i*t, y1 - 3 + t));
+				}
+				CBrush brush;
+				COLORREF brushColor = RGB(128, 128, 235);
+				brush.CreateSolidBrush(brushColor);
+				RECT rect;
+				for (int i = 0; i < l; i++)
+				{
+					rect.left = x + i*t;
+					rect.top = y;
+					rect.right = x + (i + 1)*t - 4;
+					rect.bottom = y + t - 4;
+					dc.FillRect(&rect, &brush);
+				}
+
+
+		}
+};
+
+*/
+
+class Class {
+public:
+	int c;
+	int k;
+	Class(int c1, int k1) :c(c1), k(k1){}
+	void Print(int x, int y, int t, COLORREF b, CPaintDC &dc)
+	{
+		if (c > 0 && k > 0) {
+			for (int i = 0; i < 3; i++)
+			{
+				if (i == 0) {
+					dc.MoveTo(CPoint(x - 2 + i*t, y + 14));
+					dc.LineTo(CPoint(x - 2 + i*t, y - 1 + c*t));
+				}
+				else {
+					dc.MoveTo(CPoint(x - 2 + i*t, y - 2));
+					dc.LineTo(CPoint(x - 2 + i*t, y - 1 + c*t));
+				}
+			}
+
+			for (int j = 0; j < c + 1; j++)
+			{
+				if (j == 0) {
+					dc.MoveTo(CPoint(x + 14, y - 2 + j*t));
+					dc.LineTo(CPoint(x - 2 + c*t, y - 2 + j*t));
+				}
+				else {
+					dc.MoveTo(CPoint(x - 1, y - 2 + j*t));
+					dc.LineTo(CPoint(x - 2 + c*t, y - 2 + j*t));
+				}
+			}
+
+			CBrush brush;
+			brush.CreateSolidBrush(b);
+			
+			RECT rect;
+			for (int i = 0; i < k; i++)
+				for (int j = 0; j < c; j++)
+				{
+					if (i == 0 && j == 0) {
+					}
+					else {
+						rect.left = x + i*t;
+						rect.top = y + j*t;
+						rect.right = x + (i + 1)*t - 4;
+						rect.bottom = y + (j + 1)*t - 4;
+						dc.FillRect(&rect, &brush);
+					}
+				}
+		}
+		else if (c > 0 && k < 0) {
+			k = -k;
+			for (int i = 0; i < 3; i++)
+			{
+				if (i == 2) {
+					dc.MoveTo(CPoint(x - 2 + i*t, y + 15));
+					dc.LineTo(CPoint(x - 2 + i*t, y - 2 + c*t));
+				}
+				else {
+					dc.MoveTo(CPoint(x - 2 + i*t, y - 2));
+					dc.LineTo(CPoint(x - 2 + i*t, y - 1 + c*t));
+				}
+			}
+
+			for (int j = 0; j < c + 1; j++)
+			{
+				if (j == 0) {
+					dc.MoveTo(CPoint(x  -2, y - 2 + j*t));
+					dc.LineTo(CPoint(x  -16 + c*t, y - 2 + j*t));
+				}
+				else {
+					dc.MoveTo(CPoint(x - 1, y - 2 + j*t));
+					dc.LineTo(CPoint(x - 2 + c*t, y - 2 + j*t));
+				}
+			}
+			
+
+			CBrush brush;
+			brush.CreateSolidBrush(b);
+
+			RECT rect;
+			for (int i = 0; i < k; i++)
+				for (int j = 0; j < c; j++)
+				{
+					if (i == 1 && j == 0) {
+					}
+					else {
+						rect.left = x + i*t;
+						rect.top = y + j*t;
+						rect.right = x + (i + 1)*t - 4;
+						rect.bottom = y + (j + 1)*t - 4;
+						dc.FillRect(&rect, &brush);
+					}
+				}
+		}
+		else if (c < 0 && k > 0) {
+			c = -c;
+			for (int i = 0; i < 3; i++)
+			{
+				if (i == 2) {
+					dc.MoveTo(CPoint(x - 2 + i*t, y - 1));
+					dc.LineTo(CPoint(x - 2 + i*t, y - 16 + c*t));
+				}
+				else {
+					dc.MoveTo(CPoint(x - 2 + i*t, y - 2));
+					dc.LineTo(CPoint(x - 2 + i*t, y - 1 + c*t));
+				}
+			}
+
+			for (int j = 0; j < c + 1; j++)
+			{
+				if (j == c) {
+					dc.MoveTo(CPoint(x - 2, y - 2 + j*t));
+					dc.LineTo(CPoint(x - 16 + c*t, y - 2 + j*t));
+				}
+				else {
+					dc.MoveTo(CPoint(x - 1, y - 2 + j*t));
+					dc.LineTo(CPoint(x - 2 + c*t, y - 2 + j*t));
+				}
+			}
+
+
+			CBrush brush;
+			brush.CreateSolidBrush(b);
+
+			RECT rect;
+			for (int i = 0; i < k; i++)
+				for (int j = 0; j < c; j++)
+				{
+					if (i == 1 && j == 1) {
+					}
+					else {
+						rect.left = x + i*t;
+						rect.top = y + j*t;
+						rect.right = x + (i + 1)*t - 4;
+						rect.bottom = y + (j + 1)*t - 4;
+						dc.FillRect(&rect, &brush);
+					}
+				}
+		}
+		else if (c < 0 && k < 0) {
+			c = -c;
+			k = -k;
+			for (int i = 0; i < 3; i++)
+			{
+				if (i == 0) {
+					dc.MoveTo(CPoint(x - 2 + i*t, y - 1));
+					dc.LineTo(CPoint(x - 2 + i*t, y - 16 + c*t));
+				}
+				else {
+					dc.MoveTo(CPoint(x - 2 + i*t, y - 2));
+					dc.LineTo(CPoint(x - 2 + i*t, y - 1 + c*t));
+				}
+			}
+
+			for (int j = 0; j < c + 1; j++)
+			{
+				if (j == c) {
+					dc.MoveTo(CPoint(x  +14, y - 2 + j*t));
+					dc.LineTo(CPoint(x - 2 + c*t, y - 2 + j*t));
+				}
+				else {
+					dc.MoveTo(CPoint(x - 1, y - 2 + j*t));
+					dc.LineTo(CPoint(x - 2 + c*t, y - 2 + j*t));
+				}
+			}
+
+
+			CBrush brush;
+			brush.CreateSolidBrush(b);
+
+			RECT rect;
+			for (int i = 0; i < k; i++)
+				for (int j = 0; j < c; j++)
+				{
+					if (i == 0 && j == 1) {
+					}
+					else {
+						rect.left = x + i*t;
+						rect.top = y + j*t;
+						rect.right = x + (i + 1)*t - 4;
+						rect.bottom = y + (j + 1)*t - 4;
+						dc.FillRect(&rect, &brush);
+					}
+				}
+		}
+		}
+};
+class ugol {
+public:
+	int r;
+	int a;
+	ugol(int r1, int a1) :r(r1), a(a1){}
+	void Print(int x, int y, int t, COLORREF b, CPaintDC &dc)
+	{
+		for (int i = 0; i < 3 + 1; i++)
+		{
+			if (i == 0 || i == 1) {
+				dc.MoveTo(CPoint(x - 2 + i*t, y + 28));
+				dc.LineTo(CPoint(x - 2 + i*t, y - 1 + r*t));
+			}
+			else {
+				dc.MoveTo(CPoint(x - 2 + i*t, y - 2));
+				dc.LineTo(CPoint(x - 2 + i*t, y - 1 + r*t));
+			}
+		}
+
+		for (int j = 0; j < 3 + 1; j++)
+		{
+			if (j == 0 || j == 1) {
+				dc.MoveTo(CPoint(x + 28, y - 2 + j*t));
+				dc.LineTo(CPoint(x - 2 + a*t, y - 2 + j*t));
+			}
+			else {
+				dc.MoveTo(CPoint(x - 1, y - 2 + j*t));
+				dc.LineTo(CPoint(x - 2 + a*t, y - 2 + j*t));
+			}
+		}
+
+
+		CBrush brush;
+		brush.CreateSolidBrush(b);
+
+		RECT rect;
+			for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 3; j++)
+			{
+				if (i == 2|| (i == 1 && j == 2) || (i == 0 && j == 2)) {
+					rect.left = x + i*t;
+					rect.top = y + j*t;
+					rect.right = x + (i + 1)*t - 4;
+					rect.bottom = y + (j + 1)*t - 4;
+					dc.FillRect(&rect, &brush);
+				}
+			}	
+	}
+};
+class Cross {
+public:
+	int n;
+	int v;
+	Cross(int n1, int v1) :n(n1), v(v1){}
+	void Print(int x, int y, int t, COLORREF b, CPaintDC &dc)
+	{
+
+		for (int i = 0; i < v + 1; i++)
+		{
+			if (i == 0 || i == v) {
+				dc.MoveTo(CPoint(x  - 2+ i*t, y + 13));
+				dc.LineTo(CPoint(x - 2 + i*t, y - 16 + n*t));
+			}
+			else {
+				dc.MoveTo(CPoint(x - 2 + i*t, y - 2));
+				dc.LineTo(CPoint(x - 2 + i*t, y - 1 + n*t));
+
+			}
+		}
+
+		for (int j = 0; j < n + 1; j++)
+		{
+			if (j == 0 || j == n) {
+				dc.MoveTo(CPoint(x + 14, y - 2 + j*t));
+				dc.LineTo(CPoint(x  -17 + v*t, y - 2 + j*t));
+			}
+			else {
+				dc.MoveTo(CPoint(x - 1, y - 2 + j*t));
+				dc.LineTo(CPoint(x - 2 + v*t, y - 2 + j*t));
+
+			}
+			
+		}
+
+		CBrush brush;
+		brush.CreateSolidBrush(b);
+
+		RECT rect;
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < v; j++)
+			{
+				if (i == 1 || (i == 0 && j == 1) || (i == 2 && j == 1)) {
+					rect.left = x + i*t;
+					rect.top = y + j*t;
+					rect.right = x + (i + 1)*t - 4;
+					rect.bottom = y + (j + 1)*t - 4;
+					dc.FillRect(&rect, &brush);
+				}
+			}
+
+	}
+};
+
+class Stick {
+public:
+	int h;
+	int l;
+	Stick(int h1, int l1) :h(h1), l(l1){}
+	void Print(int x, int y, int t, COLORREF b, CPaintDC &dc)
+	{
+		if (h <= l) {
+
+			for (int i = 0; i < l + 1; i++)
+			{
+				dc.MoveTo(CPoint(x - 2 + i*t, y - 2));
+				dc.LineTo(CPoint(x - 2 + i*t, y - 1 + h*t));
+			}
+
+			for (int j = 0; j < h + 1; j++)
+			{
+				dc.MoveTo(CPoint(x - 1, y - 2 + j*t));
+				dc.LineTo(CPoint(x - 2 + l*t, y - 2 + j*t));
+			}
+
+			CBrush brush;
+			brush.CreateSolidBrush(b);
+
+			RECT rect;
+			for (int i = 0; i < l; i++)
+				for (int j = 0; j < h; j++)
+				{
+					rect.left = x + i*t;
+					rect.top = y + j*t;
+					rect.right = x + (i + 1)*t - 4;
+					rect.bottom = y + (j + 1)*t - 4;
+					dc.FillRect(&rect, &brush);
+				}
+
+		}
+		else {
+
+			for (int i = 0; i < l + 1; i++)
+			{
+				dc.MoveTo(CPoint(x - 2 + i*t, y - 2));
+				dc.LineTo(CPoint(x - 2 + i*t, y - 1 + h*t));
+			}
+
+			for (int j = 0; j < h + 1; j++)
+			{
+				dc.MoveTo(CPoint(x - 1, y - 2 + j*t));
+				dc.LineTo(CPoint(x - 2 + l*t, y - 2 + j*t));
+			}
+			CBrush brush;
+			brush.CreateSolidBrush(b);
+			RECT rect;
+			for (int i = 0; i < l; i++)
+				for (int j = 0; j < h; j++)
+				{
+					rect.left =  y + i*t - 10;
+					rect.top = x  + j*t + 10;
+					rect.right = y + (i + 1)*t - 10   - 4;
+					rect.bottom = x + 10  + (j + 1)*t - 4;
+					dc.FillRect(&rect, &brush);
+				}
+			}
+		}
+	};
+
+
+class TetrisWnd : public CFrameWnd
+{
+public:
+	TetrisWnd();
+	void NewShape(); // appearance of new shape at the top
+	COLORREF ShapeColor(int color); // some reserved colors
+	void SetLevel(int);
+	bool CheckLeft(); // check the possibility to move on the left
+	bool CheckRight(); // check the possibility to move on the right
+	void ShowTitle(); // show the window title
+	void CheckForLine(); // check for the completed line
+	bool IsAtBottom(); // check the possibility to move on the bottom
+	void ClearStock(); // clear the field
+	CRect GetRect(); // get the rectangle of shape's placement
+	int color; // current color
+};
+//void TetrisWnd::OnKeyDown()
+//{}
+afx_msg void CMainWin::OnPaint()
+{
+	// Создадим контекст устройства для обработки WM_PAINT
+	CPaintDC dc(this);
+	RECT cr;
+	this->GetClientRect(&cr);
+	int x0 = cr.left + 10, y0 = cr.top + 20;
+	int t = 15;
+
+	CBrush brush;
+	COLORREF brushColor = RGB(0, 0, 0);
+	CBrush brush1;
+	COLORREF brushColor1 = RGB(170, 50, 70);
+	CBrush brush2;
+	COLORREF brushColor2 = RGB(3, 160, 49);
+
+	CBrush brush3;
+	COLORREF brushColor3 = RGB(255, 255, 0);
+	CBrush brush4;
+	COLORREF brushColor4 = RGB(107, 11, 192);
+	brush.CreateSolidBrush(brushColor);
+	RECT rect;
+	for (int i = 0; i < 10; i++)
+		for (int j = 0; j < 10; j++)
+		{
+			rect.left = x0 + i*t;
+			rect.top = y0 + j*t;
+			rect.right = x0 + (i + 1)*t - 4;
+			rect.bottom = y0 + (j + 1)*t - 4;
+			dc.FillRect(&rect, &brush);
+		}
+
+
+	// Затираем текст и снова выводим (возможно уже другой текст)
+
+}
